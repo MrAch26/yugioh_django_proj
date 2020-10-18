@@ -1,11 +1,12 @@
 {% extends 'partials/base.html' %}
-{% load crispy_forms_tags %}
 {% block content %}
-        <h3 class="text-center">SignUp Page !</h3>
+    {% load materializecss %}
+        <h3 class="text-center"><u>SignUp Page !</u></h3>
+    <br>
     <div style="margin: 10px 50px 50px">
         <form method="post">
             {% csrf_token %}
-            {{ form }}
+            {{ form|materializecss }}
             <button type="submit" class="btn btn-primary">Sign Up</button>
         </form>
     </div>
