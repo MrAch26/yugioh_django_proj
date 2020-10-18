@@ -1,10 +1,12 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.views.generic import CreateView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, UpdateView, DetailView
 
-from account.forms import UserSignupForm
+from account.forms import UserSignupForm, ProfileViewForm
+from account.models import Profile
+from trading_cards.models import Card
 
 
 class UserSignUp(CreateView):
@@ -44,3 +46,18 @@ class UserSignUp(CreateView):
             login(self.request, user)
             # Redirect to success url
             return redirect(reverse(self.get_success_url()))
+
+
+class ProfileView(UpdateView):
+    model = Profile
+    template_name = 'profile.html'
+    form_class = ProfileViewForm
+    success_url = reverse_lazy('home')
+
+
+def my_deck(request):
+    return render(request, 'my_deck.html', {User: 'user'})
+
+class MyCard(DetailView):
+    model = Card
+    # todo: add details view for deck

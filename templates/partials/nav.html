@@ -1,0 +1,34 @@
+ <nav class="nav-extended brown">
+    <div class="nav-wrapper">
+      <a href="{% url 'home' %}" class="brand-logo">Yu-Gi-Oh Trading</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+{#        <li><a href="sass.html">My Profile</a></li>#}
+        <li><a href="badges.html">Transactions</a></li>
+        <li><a href="collapsible.html">Forum</a></li>
+
+      </ul>
+        <ul id="nav-mobile" class="right hide-on-small-and-down">
+            {% if user.username %}
+                <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">User: {{ user.username }}<i class="material-icons right">arrow_drop_down</i></a></li>
+                {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+        </ul>
+    </div>
+  </nav>
+<!--SideNav -->
+  <ul class="sidenav" id="mobile-demo">
+    <li><a href="{% url 'my_deck' %}">My Deck</a></li>
+    <li><a href="badges.html">Transactions</a></li>
+    <li><a href="collapsible.html">Forum</a></li>
+{#      todo: fix user and login inside sidebar#}
+{#    <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">User: {{ user.username }}<i class="material-icons right">arrow_drop_down</i></a></li>#}
+  </ul>
+<!-- Dropdown Structure -->
+{% if user.username %}
+<ul id="dropdown1" class="dropdown-content">
+    <li><a href="{% url 'profile' user.profile.id %}">My Profile</a></li>
+    <li><a href="{% url 'logout' %}">Logout</a></li>
+</ul>
+{% endif %}

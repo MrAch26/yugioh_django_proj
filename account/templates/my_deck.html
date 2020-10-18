@@ -1,0 +1,31 @@
+{% extends 'partials/base.html' %}
+{% block title %}
+    My Deck
+{% endblock %}
+{% block css %}
+    <style>
+{#    todo: DISPLAY INLINE each card #}
+    </style>
+{% endblock %}
+{% block content %}
+    <h2 class="header">My Deck</h2>
+    {% if user.is_authenticated %}
+    {% for foo in user.profile.deck.all %}
+        <div class="row">
+        <div class="col s6 m6">
+  <div class="card" style="display: inline-block">
+    <div class="card-image waves-effect waves-block waves-light">
+      <img class="activator" src="{{ foo.img }}">
+    </div>
+    <div class="card-content">
+      <span class="card-title activator grey-text text-darken-4">{{ foo.name}}<i class="material-icons right">more_vert</i></span>
+      <p><a href="#">This is a link</a></p>
+    </div>
+    <div class="card-reveal">
+      <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+      <p>Here is some more information about this product that is only revealed once clicked on.</p>
+    </div>
+  </div></div></div>
+    {% endfor %}
+{% endif %}
+{% endblock %}

@@ -2,4 +2,15 @@
 
 {% block content %}
 <h1>HomePage !</h1>
+    {% if user.username %}
+<p>Hello {{ user.first_name }}</p>
+    <h2>Here are some card to trade :</h2>
+        {% else %}
+        <h3>You need to <a href="{% url 'login' %}">Login</a> </h3>
+    {% endif %}
+{#{% if user.is_authenticated %}#}
+{#    {% for foo in user.profile.deck.all %}#}
+{#        {{ foo.name }}#}
+{#    {% endfor %}#}
+{#{% endif %}#}
 {% endblock %}
