@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'account',
     'crispy_forms',
     'materializecssform',
-    'forum'
+    'forum',
+    'trading_cards'
 ]
 
 MIDDLEWARE = [
