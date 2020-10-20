@@ -1,12 +1,16 @@
+from imp import reload
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseForbidden
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, ListView, DetailView, UpdateView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
-from .models import Forum
+from .forms import CommentForm
+from .models import Forum, Comment
 
 
 class OwnerProtectMixin(object):
@@ -25,10 +29,11 @@ class ForumView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')  # Protected the class
-class ForumCreate(CreateView):
+class ForumCreate(SuccessMessageMixin, CreateView):
     model = Forum
     fields = ['title', 'desc']
     # widget = {'desc': forms.RadioSelect()}
+    success_message = 'Forum was successfully created'
     success_url = reverse_lazy('forum')
 
     def form_valid(self, form):
@@ -42,8 +47,10 @@ class ForumUpdateView(OwnerProtectMixin, UpdateView):
     fields = ['title', 'desc']
     context_object_name = 'forums'
     template_name = 'forum/forum_update_form.html'
-    success_url = reverse_lazy('forum')
+    # success_url = reverse_lazy('forum')
 
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('forum-detail', kwargs={'slug': self.object.slug})
 
 @method_decorator(login_required, name='dispatch')  # Protected the class
 class ForumDetailView(DetailView):
@@ -52,7 +59,8 @@ class ForumDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['additional'] = 'this is the value of the additional variable'
+        context['form_comment'] = CommentForm()
+        # context['additional'] = 'this is the value of the additional variable'
         return context
 
 
@@ -67,3 +75,47 @@ class ForumUserListView(ListView):
         return Forum.objects.filter(user=self.user)
 
 
+@method_decorator(login_required, name='dispatch')
+class ForumDeleteView(SuccessMessageMixin, OwnerProtectMixin, DeleteView):
+    model = Forum
+    success_url = reverse_lazy('forum')
+    context_object_name = 'forums'
+    success_message = 'Forum was successfully deleted'
+
+#     todo: success message doesnt work for delete
+
+
+# COMMENT
+class CommentCreateView(CreateView):
+    model = Comment
+    fields = ['desc']
+    success_url = reverse_lazy('forum')
+    # todo: try to redirect same page
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('forum-detail', kwargs={'slug': self.object.forum.slug})
+
+    def form_valid(self, form):
+        _forum = get_object_or_404(Forum, id=self.kwargs['pk'])
+        form.instance.user = self.request.user
+        form.instance.forum = _forum
+        return super().form_valid(form)
+
+
+@method_decorator(login_required, name='dispatch')
+class CommentUpdateView(OwnerProtectMixin, UpdateView):
+    model = Comment
+    fields = ['desc']
+    template_name = 'forum/forum_update_comment.html'
+
+@method_decorator(login_required, name='dispatch')
+class CommentDeleteView(OwnerProtectMixin, DeleteView):
+    model = Comment
+    # success_url = reverse_lazy('forum')
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('forum-detail', kwargs={'slug': self.object.forum.slug})
+
+
+
+# todo: Maybe Paginate

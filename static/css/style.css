@@ -5,3 +5,8 @@
 /*.container{*/
 /*    background-color: lightgray;*/
 /*}*/
+
+.anchor, .anchor:hover, .anchor:active, .anchor:focus{
+    text-decoration: none!important;
+    color: inherit!important;
+}

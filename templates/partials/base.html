@@ -32,5 +32,14 @@
    <!--JS materialize-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="{% static 'js/script.js' %}"></script>
+
+      {% if messages %}
+        <div class="card bg-success text-white">
+        {% for message in messages %}
+            <div class="card-body">{{message}}</div>
+        {% endfor %}
+        </div>
+    {% endif %}
+{#    Todo: MESSAGES#}
   </body>
 </html>

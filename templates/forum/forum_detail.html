@@ -1,17 +1,47 @@
 {% extends "partials/base.html" %}
 {% load humanize %}
+{% load materializecss %}
 {% block title %}
 {{ forums.title }}
 {% endblock %}
 
 {% block content %}
 <ul class="collection with-header">
-        <li class="collection-header"><h4>{{ forums.title }}</h4>
         {% if request.user ==  forums.user %}
-        <a href="{% url 'forum-edit' forums.id %}">Edit</a>
-        {% endif %} </li>
+
+        <form method="post" action="{% url 'forum-delete' forums.id %}">
+            <button class="btn-small"><a class="anchor" href="{% url 'forum-edit' forums.id %}">Edit</a></button>
+            {% csrf_token %}
+            <button class="btn-small red" type="submit">Delete</button>
+        </form>
+
+        {% endif %}
+        <li class="collection-header"><h4>{{ forums.title }}</h4></li>
         <li class="collection-item">{{ forums.desc }}</li>
         <span> - <i>{{object.created_at | naturaltime}}</i></span>
       </ul>
-    <p>{{ additional }}</p>
+    <br>
+<!-- Display comment -->
+    <h5><u>A few Comments :</u></h5>
+  {% for comment in forums.comment_set.all %}
+  	<ul class="collection">
+      <li class="collection-item">{{comment.desc}}</li><span style="font-size: 12px;"><i>by {{comment.user}}</i></span>
+    </ul>
+
+	  	{% if request.user == comment.user %}
+	  		<button class="btn-small"><a class="anchor" href="{% url 'edit-comment' comment.id %}">Edit Comment</a></button>
+	  		<form method="post" action="{% url 'delete-comment' comment.id %}">
+	  			{% csrf_token %}
+                <button class="btn-small red" type="submit" >Delete Comment</button>
+	  		</form>
+	  	{% endif %}
+
+  	</p>
+  {% endfor %}
+    <b>Add a Comment : </b>
+        <form method="post" action="{% url 'add-comment' forums.id %}">
+	  	{% csrf_token %}
+	  	{{ form_comment | materializecss}}
+            <button type="submit" class="btn-floating btn-large waves-effect waves-light red" ><i class="material-icons">add</i></button>
+	</form>
 {% endblock %}

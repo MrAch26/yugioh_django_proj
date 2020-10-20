@@ -16,4 +16,15 @@ Forum
                 <i>{{ forum.created_at | naturaltime }}</i><a href="{% url 'forum-detail' forum.slug%}" class="secondary-content"><i class="material-icons">send</i></a></div></li>
         {% endfor %}
       </ul>
+
+    {% if messages %}
+        <div class="card bg-success text-white">
+        {% for message in messages %}
+            <div class="card-body">{{message}}</div>
+        {% endfor %}
+        </div>
+    {% endif %}
+{#    Todo: MESSAGES#}
+
+
 {% endblock %}
