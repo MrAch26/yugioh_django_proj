@@ -45,7 +45,6 @@ env/
 **/migrations/**
 !**/migrations
 !**/migrations/__init__.py
-static/
 .idea/
 # Mac Stuff
 .DS_Store
