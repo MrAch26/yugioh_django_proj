@@ -20,7 +20,4 @@ class UserSignupForm(UserCreationForm):
 class ProfileViewForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = '__all__'
-        widgets = {
-         'origin': forms.RadioSelect
-        }
+        fields = ('origin',)

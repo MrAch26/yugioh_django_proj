@@ -11,14 +11,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="icon" href="{% static 'images/favicon.ico' %}">
-
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block css %}
     {% endblock %}
 
-    <title>{% block title %}{% endblock title %}</title>
-  </head>
-  <body>
 
+    <title>{% block title %}YuGiOh{% endblock title %}</title>
+  </head>
+{#  todo: if statement for user.profile.origin (yugi/baku) #}
+  <body style="">
   {% include 'partials/nav.html' %}
     <div class="container">
       {% block content %}
@@ -30,11 +31,6 @@
 
    <!--JS materialize-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script>
-      $(document).ready(function(){
-   $('.sidenav').sidenav();
-  });
-      $(".dropdown-trigger").dropdown();
-  </script>
+    <script src="{% static 'js/script.js' %}"></script>
   </body>
 </html>

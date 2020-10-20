@@ -6,5 +6,4 @@ urlpatterns = [
     path('profile/<int:pk>', views.ProfileView.as_view(), name='profile'),
     path('profile/my_deck/', views.my_deck, name='my_deck'),
     path('signup/', views.UserSignUp.as_view(), name="signup"),
-
 ]

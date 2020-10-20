@@ -58,6 +58,7 @@ class ProfileView(UpdateView):
 def my_deck(request):
     return render(request, 'my_deck.html', {User: 'user'})
 
+
 class MyCard(DetailView):
     model = Card
     # todo: add details view for deck

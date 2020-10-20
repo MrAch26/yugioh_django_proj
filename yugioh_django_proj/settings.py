@@ -36,9 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'account',
-    'materializecssform',
     'forum',
-    'trading_cards'
+    'trading_cards',
+    'materializecssform',
+    'django.contrib.humanize'
 ]
 
 MIDDLEWARE = [

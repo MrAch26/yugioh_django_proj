@@ -1,0 +1,17 @@
+{% extends "partials/base.html" %}
+{% load humanize %}
+{% block title %}
+{{ forums.title }}
+{% endblock %}
+
+{% block content %}
+<ul class="collection with-header">
+        <li class="collection-header"><h4>{{ forums.title }}</h4>
+        {% if request.user ==  forums.user %}
+        <a href="{% url 'forum-edit' forums.id %}">Edit</a>
+        {% endif %} </li>
+        <li class="collection-item">{{ forums.desc }}</li>
+        <span> - <i>{{object.created_at | naturaltime}}</i></span>
+      </ul>
+    <p>{{ additional }}</p>
+{% endblock %}

@@ -9,7 +9,6 @@ django.setup()
 # After setup()
 from trading_cards.models import Card
 
-
 # url = 'https://db.ygoprodeck.com/api/v7/randomcard.php'
 url = 'https://db.ygoprodeck.com/api/v7/cardinfo.php'
 response = requests.get(url)
@@ -21,10 +20,17 @@ for card in cards:
         yugioh_id=card['id'],
         name=card['name'],
         img_small=card['card_images'][0]['image_url_small'],
-        img=card['card_images'][0]['image_url']
+        img=card['card_images'][0]['image_url'],
+        desc=card['desc'],
     )
-    # todo: add desc, atk, def, level, race,.. for detail view
     print(card)
     i += 1
     if i == 200:
         break
+
+# for card in cards:
+#     print(card['name'])
+#     i += 1
+#     if i == 10:
+#         break
+# todo: add a new model for atk def level ONLY FOR MOSTERS if revelent

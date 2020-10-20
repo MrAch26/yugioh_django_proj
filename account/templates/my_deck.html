@@ -1,31 +1,52 @@
 {% extends 'partials/base.html' %}
+{% load static %}
 {% block title %}
     My Deck
 {% endblock %}
 {% block css %}
     <style>
-{#    todo: DISPLAY INLINE each card #}
+        a:hover {
+        color: white !important;
+        text-decoration: none !important;
+        }
     </style>
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
 {% endblock %}
 {% block content %}
-    <h2 class="header">My Deck</h2>
+    <br>
+    <h2>My Deck : </h2>
+    <br>
     {% if user.is_authenticated %}
-    {% for foo in user.profile.deck.all %}
         <div class="row">
-        <div class="col s6 m6">
-  <div class="card" style="display: inline-block">
-    <div class="card-image waves-effect waves-block waves-light">
-      <img class="activator" src="{{ foo.img }}">
-    </div>
-    <div class="card-content">
-      <span class="card-title activator grey-text text-darken-4">{{ foo.name}}<i class="material-icons right">more_vert</i></span>
-      <p><a href="#">This is a link</a></p>
-    </div>
-    <div class="card-reveal">
-      <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
-      <p>Here is some more information about this product that is only revealed once clicked on.</p>
-    </div>
-  </div></div></div>
-    {% endfor %}
-{% endif %}
+            {% for foo in user.profile.deck.all %}
+                <div class="card col-11 col-sm-5 col-md-3 col-xl-2 m-2 text-center" style="width: 18rem">
+                    <img class="card-img-top" src="{{ foo.img }}"
+                         alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ foo.name }}</h5>
+{#                        <p class="card-text">{{ foo.desc|truncatechars:50 }}</p>#}
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#{{ foo.id }}"
+                                aria-expanded="true" aria-controls="collapseOne">
+                            Description
+                        </button>
+                        <div id="{{ foo.id }}" class="collapse" aria-labelledby="headingOne"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                {{ foo.desc }}
+                            </div>
+                        </div>
+
+                        <a href="{% url 'make_trade' foo.id %}" class="btn btn-primary">Create Trade</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+<script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 {% endblock %}
