@@ -6,7 +6,7 @@ from django.views.generic import CreateView, UpdateView, DetailView
 
 from account.forms import UserSignupForm, ProfileViewForm
 from account.models import Profile
-from trading_cards.models import Card
+from trading_cards.models import Card, Trade
 
 
 class UserSignUp(CreateView):
@@ -56,7 +56,8 @@ class ProfileView(UpdateView):
 
 
 def my_deck(request):
-    return render(request, 'my_deck.html', {User: 'user'})
+    trade = Trade.objects.all()
+    return render(request, 'my_deck.html', {'trade': trade})
 
 
 class MyCard(DetailView):

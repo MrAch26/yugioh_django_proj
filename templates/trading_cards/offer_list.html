@@ -1,0 +1,28 @@
+{% extends "partials/base.html" %}
+
+{% block title %}
+    My Offers
+{% endblock %}
+{#todo: avatar content materialize https://materializecss.com/collections.html#}
+{% block content %}
+    <h2>My offers :</h2>
+    {% for offer in offers %}
+        {% with c=offer.card %}
+            {% with t=offer.trade %}
+                {% if user.profile.id == offer.profile_id %}
+                    <hr>
+                    <p>You offer this card :{{ c.name }}</p>
+                    <p>TO {{ t.profile }}</p>
+                    <p>to get this card : {{ t }}</p>
+                    <form method="post" action="{% url 'offer-delete' offer.id %}">
+                        <button class="btn-small"><a class="anchor" href="{% url 'offer-edit' offer.id %}">Edit</a>
+                        </button>
+                        {% csrf_token %}
+                        <button class="btn-small red" type="submit">Delete</button>
+                    </form>
+                    <br>
+                {% endif %}
+            {% endwith %}
+        {% endwith %}
+    {% endfor %}
+{% endblock %}

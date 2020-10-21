@@ -32,7 +32,7 @@
    <!--JS materialize-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="{% static 'js/script.js' %}"></script>
-
+{% comment  %}
       {% if messages %}
         <div class="card bg-success text-white">
         {% for message in messages %}
@@ -40,6 +40,7 @@
         {% endfor %}
         </div>
     {% endif %}
-{#    Todo: MESSAGES#}
+{% endcomment %}
+{#    Todo: MESSAGES in base or not ?#}
   </body>
 </html>

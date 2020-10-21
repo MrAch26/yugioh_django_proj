@@ -47,10 +47,12 @@ class ForumUpdateView(OwnerProtectMixin, UpdateView):
     fields = ['title', 'desc']
     context_object_name = 'forums'
     template_name = 'forum/forum_update_form.html'
+
     # success_url = reverse_lazy('forum')
 
     def get_success_url(self, **kwargs):
         return reverse_lazy('forum-detail', kwargs={'slug': self.object.slug})
+
 
 @method_decorator(login_required, name='dispatch')  # Protected the class
 class ForumDetailView(DetailView):
@@ -81,7 +83,6 @@ class ForumDeleteView(SuccessMessageMixin, OwnerProtectMixin, DeleteView):
     success_url = reverse_lazy('forum')
     context_object_name = 'forums'
     success_message = 'Forum was successfully deleted'
-
 #     todo: success message doesnt work for delete
 
 
@@ -89,8 +90,6 @@ class ForumDeleteView(SuccessMessageMixin, OwnerProtectMixin, DeleteView):
 class CommentCreateView(CreateView):
     model = Comment
     fields = ['desc']
-    success_url = reverse_lazy('forum')
-    # todo: try to redirect same page
 
     def get_success_url(self, **kwargs):
         return reverse_lazy('forum-detail', kwargs={'slug': self.object.forum.slug})
@@ -108,14 +107,17 @@ class CommentUpdateView(OwnerProtectMixin, UpdateView):
     fields = ['desc']
     template_name = 'forum/forum_update_comment.html'
 
-@method_decorator(login_required, name='dispatch')
-class CommentDeleteView(OwnerProtectMixin, DeleteView):
-    model = Comment
-    # success_url = reverse_lazy('forum')
-
     def get_success_url(self, **kwargs):
         return reverse_lazy('forum-detail', kwargs={'slug': self.object.forum.slug})
 
 
+@method_decorator(login_required, name='dispatch')
+class CommentDeleteView(OwnerProtectMixin, DeleteView):
+    model = Comment
+
+    # success_url = reverse_lazy('forum')
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('forum-detail', kwargs={'slug': self.object.forum.slug})
 
 # todo: Maybe Paginate

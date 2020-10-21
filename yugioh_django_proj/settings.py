@@ -24,8 +24,8 @@ SECRET_KEY = '%pe8yhmx+*5+k^34psb_!_tqxl-a42dwmk)xx&73&03wl&=-n)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['shielded-springs-35748.herokuapp.com']
-
+ALLOWED_HOSTS = []
+# 'shielded-springs-35748.herokuapp.com'
 # Application definition
 
 INSTALLED_APPS = [
@@ -76,10 +76,22 @@ WSGI_APPLICATION = 'yugioh_django_proj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# todo: use postgres for Data
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'db_YuGiOh',
+        'USER': 'postgres',
+        'PASSWORD': 'Ba1958',
+        'HOST': '127.0.0.1',
+        'PORT': '5433',
     }
 }
 

@@ -23,7 +23,7 @@ class Card(models.Model):
 @receiver(post_save, sender=User)
 def create_profile(sender, created, instance, **kwargs):
     if created:
-        origin = random.choice(ProfileType.objects.all())
+        origin = random.choice(ProfileType.objects.all())  # remember that ProfileType is empty...
         profile = Profile.objects.create(user=instance, origin=origin)
         profile.deck.add(*random.sample(list(Card.objects.all()), k=26))
 
@@ -35,6 +35,9 @@ class Trade(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='P')
 
+    def __str__(self):
+        return self.card.name
+
 
 class Offer(models.Model):
     STATUS_CHOICES = [("A", "Accepted"), ("D", "Declined"), ("W", "Waiting review")]
@@ -43,3 +46,6 @@ class Offer(models.Model):
     card = models.ForeignKey(Card, models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="W")
+
+    def __str__(self):
+        return self.card.name

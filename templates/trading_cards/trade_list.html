@@ -1,0 +1,33 @@
+{% extends "partials/base.html" %}
+
+{% block title %}
+Transactions
+{% endblock %}
+
+{% block content %}
+<h1>Offers made for your trade :</h1>
+
+{% for trade in trades %}
+    {% if user.profile.id == trade.profile_id %}
+        {% with c=trade.card %}
+            {% for offer in offers %}
+                {% if offer.trade.profile == user.profile %}
+{#                    todo: add if statement for trade and offer need filter or something#}
+                    <hr>
+                    <p>user : {{ offer.profile }}</p>
+                    <p>offer you this card : {{ offer.card }}</p>
+                    <p>to get this card : {{ c.name }}</p>
+                    <form method="post" action="{% url 'offer-delete' offer.id %}">
+{#                        <button class="btn-small"><a class="anchor" href="{% url 'offer-edit' offer.id %}">Edit</a>#}
+                        </button>
+                        {% csrf_token %}
+                        <button class="btn-small red" type="submit">Decline</button>
+                    </form>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        {% endwith %}
+    {% endif %}
+    {% endfor %}
+
+{% endblock %}

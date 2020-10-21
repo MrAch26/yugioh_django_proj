@@ -1,8 +1,10 @@
 {% extends 'partials/base.html' %}
 {% load static %}
+
 {% block title %}
     My Deck
 {% endblock %}
+
 {% block css %}
     <style>
         a:hover {
@@ -12,9 +14,12 @@
     </style>
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
 {% endblock %}
+
 {% block content %}
     <br>
-    <h2>My Deck : </h2>
+
+    <h2>My Deck :</h2>
+
     <br>
     {% if user.is_authenticated %}
         <div class="row">
@@ -35,8 +40,9 @@
                                 {{ foo.desc }}
                             </div>
                         </div>
-
+                        {% if foo.name not in trade.all|join:"  " %}
                         <a href="{% url 'make_trade' foo.id %}" class="btn btn-primary">Create Trade</a>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}

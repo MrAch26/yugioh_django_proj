@@ -10,7 +10,7 @@ class Forum(models.Model):
     title = models.CharField(max_length=100)
     desc = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, max_length=255)
 
     def save(self, *args, **kwargs):
         # self.slug = slugify(self.title) if i want to add time after the slug
