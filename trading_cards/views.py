@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -32,8 +33,11 @@ class indexHistory(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['offers'] = Offer.objects.filter(status="A")
+        profile = self.request.user.profile
+        context['offers'] = Offer.objects.filter(status="A").filter(Q(profile=profile)|Q(trade__profile=profile))
         return context
+#     this required another query against the database !! check the one for OfferView and TradeView with QS...
+# Q saved the project
 
 def make_trade(request, card_id):
     card = Card.objects.get(pk=card_id)
@@ -106,6 +110,11 @@ class OfferView(LoginRequiredMixin, ListView):
     model = Offer
     context_object_name = 'offers'
 
+    def get_queryset(self):
+        qs = super(OfferView, self).get_queryset()
+        qs = qs.filter(status='W')
+        return qs
+
 
 class UpdateOffer(LoginRequiredMixin, OwnerProtectMixin, UpdateView):
     model = Offer
@@ -130,3 +139,7 @@ class TradeView(LoginRequiredMixin, ListView):
     context_object_name = 'trades'
     # template_name = 'trading_cards/trade_list.html'
 
+    def get_queryset(self):
+        qs = super(TradeView, self).get_queryset()
+        qs = qs.filter(status='P')
+        return qs
