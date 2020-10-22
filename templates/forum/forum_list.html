@@ -15,6 +15,4 @@ Forum
                 <i>{{ forum.created_at | naturaltime }}</i><a href="{% url 'forum-detail' forum.slug%}" class="secondary-content"><i class="material-icons">send</i></a></div></li>
         {% endfor %}
       </ul>
-
-
 {% endblock %}

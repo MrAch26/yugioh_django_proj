@@ -1,4 +1,6 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -7,38 +9,50 @@ from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 from trading_cards.forms import MakeOfferForm
 from trading_cards.models import Card, Trade, Offer
 
-# class OwnerProtectMixin(object):
-#     def dispatch(self, request, *args, **kwargs):
-#         objectUser = self.get_object()
-#         if objectUser.user != self.request.user:
-#             return HttpResponseForbidden()
-#         return super(OwnerProtectMixin, self).dispatch(request, *args, **kwargs)
+class OwnerProtectMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        objectUser = self.get_object()
+        if objectUser.profile.user != self.request.user:
+            return HttpResponseForbidden()
+        return super(OwnerProtectMixin, self).dispatch(request, *args, **kwargs)
 
 def index(request):
     trades = Trade.objects.filter(status='P').order_by('-timestamp')
     return render(request, 'trading_cards/index.html', {'trades': trades})
 
 
-def index_history(request):
-    trades = Trade.objects.filter(status='F').order_by('-timestamp')
-    return render(request, 'trading_cards/indexHistory.html', {'trades': trades})
+# def index_history(request):
+#     # trades = Trade.objects.filter(status='F').order_by('-timestamp')
+#     offers = Offer.objects.filter(status='A')
+#     return render(request, 'trading_cards/indexHistory.html', {'offers':offers})
 
+class indexHistory(LoginRequiredMixin, ListView):
+    model = Offer
+    template_name = "trading_cards/indexHistory.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['offers'] = Offer.objects.filter(status="A")
+        return context
 
 def make_trade(request, card_id):
     card = Card.objects.get(pk=card_id)
+
+    # if request.user.profile.trade_set.filter(card=card).exists():
+    #     return redirect('home')
+
     if card not in request.user.profile.deck.all():
         # todo: add flash message - card does not belong for trade
         return redirect('home')
 
-    trade = Trade.objects.create(
+    trade = Trade.objects.get_or_create(
         card=card,
         profile=request.user.profile
     )
     # todo: message - trade successful (class Success, Danger) Toast materialize
     return redirect('home')
 
-@method_decorator(login_required, name='dispatch')
-class MakeOfferView(CreateView):
+class MakeOfferView(LoginRequiredMixin, CreateView):
     model = Offer
     form_class = MakeOfferForm
 
@@ -60,25 +74,40 @@ class MakeOfferView(CreateView):
         context['edit'] = False
         return context
 
-@method_decorator(login_required, name='dispatch')
-def AcceptOffer(request, id, accepted):
-    trade = Trade.objects.all()
-    offer = Offer.objects.all()
+@login_required
+def accept_offer(request, offer_id, accepted):
+    offer = Offer.objects.get(pk=offer_id)
+    trade = offer.trade
+    if request.user != trade.profile.user:
+        messages.warning(request, "You cannot do that man :(")
+        return redirect('home')
 
     if accepted:
         offer.status = "A"
-        trade.status = 'F'
-        offer.deck.card
+        trade.status = "F"
+        offer.profile.deck.remove(offer.card)
+        offer.profile.deck.add(trade.card)
+        trade.profile.deck.remove(trade.card)
+        trade.profile.deck.add(offer.card)
+        trade.save()
+        for ofer in trade.offers.filter(status="W"):
+            ofer.status = 'D'
+            ofer.save()
+
+    else:
+        offer.status = "D"
+
+    offer.save()
+    return redirect("home")
 
 
 # OFFERS
-@method_decorator(login_required, name='dispatch')
-class OfferView(ListView):
+class OfferView(LoginRequiredMixin, ListView):
     model = Offer
     context_object_name = 'offers'
 
-@method_decorator(login_required, name='dispatch')
-class UpdateOffer(UpdateView):
+
+class UpdateOffer(LoginRequiredMixin, OwnerProtectMixin, UpdateView):
     model = Offer
     fields = ['card']
     context_object_name = 'offers'
@@ -89,16 +118,14 @@ class UpdateOffer(UpdateView):
         context['edit'] = True
         return context
 
-@method_decorator(login_required, name='dispatch')
-class DeleteOffer(DeleteView):
+class DeleteOffer(LoginRequiredMixin, OwnerProtectMixin, DeleteView):
     model = Offer
     context_object_name = 'offers'
     success_url = reverse_lazy('home')
 
 
 # TRANSACTIONS
-@method_decorator(login_required, name='dispatch')
-class TradeView(ListView):
+class TradeView(LoginRequiredMixin, ListView):
     model = Trade
     context_object_name = 'trades'
     # template_name = 'trading_cards/trade_list.html'

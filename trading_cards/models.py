@@ -42,7 +42,7 @@ class Trade(models.Model):
 class Offer(models.Model):
     STATUS_CHOICES = [("A", "Accepted"), ("D", "Declined"), ("W", "Waiting review")]
     profile = models.ForeignKey(Profile, models.CASCADE)  # because 2nd argument on_delete=models.CASCADE)
-    trade = models.ForeignKey(Trade, models.CASCADE)
+    trade = models.ForeignKey(Trade, models.CASCADE, related_name='offers')
     card = models.ForeignKey(Card, models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="W")

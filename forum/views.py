@@ -77,12 +77,16 @@ class ForumUserListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
-class ForumDeleteView(SuccessMessageMixin, OwnerProtectMixin, DeleteView):
+class ForumDeleteView(OwnerProtectMixin, DeleteView):
     model = Forum
     success_url = reverse_lazy('forum')
     context_object_name = 'forums'
-    messages.success(request, 'Profile details updated.')
 
+    def delete(self, *args, **kwargs):
+        messages.success(self.request, 'The forum was Deleted !')
+        return super(ForumDeleteView, self).delete(*args, **kwargs)
+
+# todo: messages
 
 # COMMENT
 class CommentCreateView(CreateView):

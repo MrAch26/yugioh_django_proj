@@ -4,8 +4,9 @@
       <a href="{% url 'home' %}" class="brand-logo">Yu-Gi-Oh Trading</a>
       <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="{% url 'my_deck' %}">My Deck</a></li>
         <li><a href="{% url 'my_offer' %}">My Offers</a></li>
-        <li><a href="badges.html">Transactions</a></li>
+        <li><a href="{% url 'trades' %}">Transactions</a></li>
         <li><a href="{% url 'forum' %}">Forum</a></li>
       </ul>
         <ul id="nav-mobile" class="right hide-on-small-and-down">

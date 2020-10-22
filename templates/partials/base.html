@@ -22,29 +22,31 @@
 <body style="">
 {% include 'partials/nav.html' %}
 
-{#{% if messages %}#}
-{#    <div class="card bg-success text-white">#}
-{#        {% for message in messages %}#}
-{#            <div class="card-body">{{ message }}</div>#}
-{#        {% endfor %}#}
-{#    </div>#}
-{#{% endif %}#}
-
 {% if messages %}
-              {% for message in messages %}
-              <div class="alert {{ message.tags }} alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                {{ message }}
-              </div>
-            {% endfor %}
-        {% endif %}
+      <ul>
+    {% for message in messages %}
+      <li class="green">{{message}}</li>
+    {% endfor %}
+      </ul>
+{% endif %}
+
+
+{#{% if messages %}#}
+{#      {% for message in messages %}#}
+{#      <div class="alert {{ message.tags }} alert-dismissible" role="alert">#}
+{#        <button type="button" class="close" data-dismiss="alert" aria-label="Close">#}
+{#          <span aria-hidden="true">&times;</span>#}
+{#        </button>#}
+{#        {{ message }}#}
+{#      </div>#}
+{#    {% endfor %}#}
+{#{% endif %}#}
 
 <div class="container">
     {% block content %}
     {% endblock content %}
 </div>
+
 
 {% block scripts %}
 {% endblock scripts %}

@@ -22,7 +22,7 @@
     {% for trade in trades %}
         {% if user.profile.id == trade.profile_id %}
             {% with c=trade.card %}
-                {% for offer in trade.offer_set.all %}
+                {% for offer in trade.offers.all %}
                     {% if offer.trade.profile == user.profile %}
 
                             <tr>
@@ -32,12 +32,9 @@
                                 <td><p><u><strong>{{ c.name }}</strong></u></p><img src="{{ c.img_small }}"
                                                                                     alt="{{ c.name }}"></td>
                                 <td>
-                                    <form method="post" action="{% url 'offer-delete' offer.id %}">
-                                        <a class="btn btn-small" href="">Accept</a><br>
-                                        {% csrf_token %}
+                                        <a class="btn btn-small" href="{% url 'finalize-offer' offer.id 1%}">Accept</a><br>
                                         <br>
-                                        <button class="btn-small red" type="submit">Decline</button>
-                                    </form>
+                                        <a class="btn-small red" href="{% url 'finalize-offer' offer.id 0%}">Decline</a>
                                 </td>
                             </tr>
 
