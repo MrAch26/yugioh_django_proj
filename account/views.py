@@ -62,4 +62,4 @@ def my_deck(request):
 
 class MyCard(DetailView):
     model = Card
-    # todo: add details view for deck
+    # todo: add details view for deck if relevant Maybe if time

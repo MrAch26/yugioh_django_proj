@@ -1,7 +1,7 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -17,30 +17,41 @@
 
 
     <title>{% block title %}YuGiOh{% endblock title %}</title>
-  </head>
-{#  todo: if statement for user.profile.origin (yugi/baku) #}
-  <body style="">
-  {% include 'partials/nav.html' %}
-    <div class="container">
-      {% block content %}
-      {% endblock content %}
-    </div>
+</head>
+{#  todo: if statement for user.profile.origin (yugi/baku) or css (YES OR NO?) #}
+<body style="">
+{% include 'partials/nav.html' %}
 
-    {% block scripts %}
-    {% endblock scripts %}
+{#{% if messages %}#}
+{#    <div class="card bg-success text-white">#}
+{#        {% for message in messages %}#}
+{#            <div class="card-body">{{ message }}</div>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#{% endif %}#}
 
-   <!--JS materialize-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="{% static 'js/script.js' %}"></script>
-{% comment  %}
-      {% if messages %}
-        <div class="card bg-success text-white">
-        {% for message in messages %}
-            <div class="card-body">{{message}}</div>
-        {% endfor %}
-        </div>
-    {% endif %}
-{% endcomment %}
-{#    Todo: MESSAGES in base or not ?#}
-  </body>
+{% if messages %}
+              {% for message in messages %}
+              <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+<div class="container">
+    {% block content %}
+    {% endblock content %}
+</div>
+
+{% block scripts %}
+{% endblock scripts %}
+
+<!--JS materialize-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="{% static 'js/script.js' %}"></script>
+
+</body>
 </html>

@@ -1,13 +1,12 @@
-from imp import reload
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, request
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.contrib import messages
 
 from .forms import CommentForm
 from .models import Forum, Comment
@@ -82,8 +81,7 @@ class ForumDeleteView(SuccessMessageMixin, OwnerProtectMixin, DeleteView):
     model = Forum
     success_url = reverse_lazy('forum')
     context_object_name = 'forums'
-    success_message = 'Forum was successfully deleted'
-#     todo: success message doesnt work for delete
+    messages.success(request, 'Profile details updated.')
 
 
 # COMMENT
@@ -120,4 +118,4 @@ class CommentDeleteView(OwnerProtectMixin, DeleteView):
     def get_success_url(self, **kwargs):
         return reverse_lazy('forum-detail', kwargs={'slug': self.object.forum.slug})
 
-# todo: Maybe Paginate
+# todo: Maybe Paginate (YES OR NO?)

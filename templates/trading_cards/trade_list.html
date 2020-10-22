@@ -1,33 +1,61 @@
 {% extends "partials/base.html" %}
 
 {% block title %}
-Transactions
+    Transactions
 {% endblock %}
 
 {% block content %}
-<h1>Offers made for your trade :</h1>
+    <h1>Offers made for your trade :</h1>
 
-{% for trade in trades %}
-    {% if user.profile.id == trade.profile_id %}
-        {% with c=trade.card %}
-            {% for offer in offers %}
-                {% if offer.trade.profile == user.profile %}
-{#                    todo: add if statement for trade and offer need filter or something#}
-                    <hr>
-                    <p>user : {{ offer.profile }}</p>
-                    <p>offer you this card : {{ offer.card }}</p>
-                    <p>to get this card : {{ c.name }}</p>
-                    <form method="post" action="{% url 'offer-delete' offer.id %}">
-{#                        <button class="btn-small"><a class="anchor" href="{% url 'offer-edit' offer.id %}">Edit</a>#}
-                        </button>
-                        {% csrf_token %}
-                        <button class="btn-small red" type="submit">Decline</button>
-                    </form>
-                    <br>
-                {% endif %}
-            {% endfor %}
-        {% endwith %}
-    {% endif %}
+                        <table class="centered ">
+                            <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Offers</th>
+                                <th>For</th>
+                                <th>Deal</th>
+
+                            </tr>
+                            </thead>
+                        <hr>
+                            <tbody>
+    {% for trade in trades %}
+        {% if user.profile.id == trade.profile_id %}
+            {% with c=trade.card %}
+                {% for offer in trade.offer_set.all %}
+                    {% if offer.trade.profile == user.profile %}
+
+                            <tr>
+                                <td>{{ offer.profile|upper }}</td>
+                                <td><p><u><strong>{{ offer.card }}</strong></u></p><img src="{{ offer.card.img_small }}"
+                                                                                        alt="{{ offer.card }}"></td>
+                                <td><p><u><strong>{{ c.name }}</strong></u></p><img src="{{ c.img_small }}"
+                                                                                    alt="{{ c.name }}"></td>
+                                <td>
+                                    <form method="post" action="{% url 'offer-delete' offer.id %}">
+                                        <a class="btn btn-small" href="">Accept</a><br>
+                                        {% csrf_token %}
+                                        <br>
+                                        <button class="btn-small red" type="submit">Decline</button>
+                                    </form>
+                                </td>
+                            </tr>
+
+{#                        <p>user : {{ offer.profile }}</p>#}
+{#                        <p>offer you this card : {{ offer.card }}</p>#}
+{#                        <p>to get this card : {{ c.name }}</p>#}
+{#                        <form method="post" action="{% url 'offer-delete' offer.id %}">#}
+                            {#                      <a class="btn btn-small" href="{% url 'offer-edit' offer.id %}">Accept</a>#}
+{#                            {% csrf_token %}#}
+{#                            <button class="btn-small red" type="submit">Decline</button>#}
+{#                        </form>#}
+{#                        <br>#}
+                    {% endif %}
+                {% endfor %}
+            {% endwith %}
+        {% endif %}
     {% endfor %}
+                            </tbody>
+                        </table>
 
 {% endblock %}

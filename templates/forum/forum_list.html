@@ -7,7 +7,6 @@ Forum
 {% block content %}
     <ul>
     </ul>
-{#todo: if statement for same title with #2 #}
       <ul class="collection with-header">
           <li class="collection-header"><h4>HomePage Forum</h4><a href="{% url 'forum-add' %}">Add</a></li>
         {% for forum in forums %}
@@ -16,15 +15,6 @@ Forum
                 <i>{{ forum.created_at | naturaltime }}</i><a href="{% url 'forum-detail' forum.slug%}" class="secondary-content"><i class="material-icons">send</i></a></div></li>
         {% endfor %}
       </ul>
-
-{#    Todo: MESSAGES in template or not #}
-    {% if messages %}
-        <div class="card bg-success text-white">
-        {% for message in messages %}
-            <div class="card-body">{{message}}</div>
-        {% endfor %}
-        </div>
-    {% endif %}
 
 
 {% endblock %}

@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.index, name='home'),
     path('create_trade/<int:card_id>', views.make_trade, name='make_trade'),
     path('trades/', TradeView.as_view(), name='trades'),
+    path('trades-history/', views.index_history, name='trades-history'),
     path('make_offer/<int:trade_id>', views.MakeOfferView.as_view(), name='make_offer'),
     path('my_offer/', OfferView.as_view(), name='my_offer'),
     path('delete_offer/<int:pk>', DeleteOffer.as_view(), name='offer-delete'),

@@ -22,9 +22,8 @@
     <li><a href="{% url 'my_deck' %}">My Deck</a></li>
     <li><a href="{% url 'my_offer' %}">My Offers</a></li>
     <li><a href="{% url 'trades' %}">Transactions</a></li>
-    <li><a href="">Transactions History</a></li>
+    <li><a href="{% url 'trades-history' %}">Transactions History</a></li>
     <li><a href="{% url 'forum' %}">Forum</a></li>
-{#      todo: add my offer and transactions history #}
   </ul>
 <!-- Dropdown Structure -->
 {% if user.username %}

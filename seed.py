@@ -33,4 +33,4 @@ for card in cards:
 #     i += 1
 #     if i == 10:
 #         break
-# todo: add a new model for atk def level ONLY FOR MOSTERS if revelent
+# todo: add a new model for atk def level ONLY FOR MOSTERS if revelent (YES OR NO?)
